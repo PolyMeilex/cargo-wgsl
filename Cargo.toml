@@ -4,6 +4,11 @@ version = "0.0.1"
 authors = ["Poly <marynczak.bartlomiej@gmail.com>"]
 edition = "2018"
 
+description = "Validate wgsl in rust projects"
+keywords = ["CLI","wgsl","cargo"]
+license = "MIT"
+repository = "https://github.com/PolyMeilex/cargo-wgsl"
+
 [dependencies]
 colored = "2.0.0"
 naga = {version="0.3.1",features = ["wgsl-in"]}
