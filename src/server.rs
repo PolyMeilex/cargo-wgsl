@@ -1,37 +1,11 @@
-use serde::{Deserialize, Serialize};
-use std::path::PathBuf;
-
 use std::io::prelude::*;
 
 use crate::validator::Validator;
 
-#[derive(Serialize, Deserialize)]
-struct Request {
-    event: RequestEvent,
-}
-
-#[derive(Serialize, Deserialize)]
-enum RequestEvent {
-    Error,
-    ValidatePath(PathBuf),
-}
-
-#[derive(Serialize, Deserialize)]
-struct Response {
-    event: ResponseEvent,
-}
-
-#[derive(Serialize, Deserialize)]
-enum ResponseEvent {
-    Ok,
-    ParserErr {
-        error: String,
-        scopes: Vec<String>,
-        line: usize,
-        pos: usize,
-    },
-    UnknownError(String),
-}
+mod request;
+use request::{Request, RequestEvent};
+mod response;
+use response::{Response, ResponseEvent};
 
 impl Response {
     fn new(event: ResponseEvent) -> Self {
