@@ -18,4 +18,5 @@ cargo install cargo-wgsl
 ## Real time validation using cargo-wgsl as a backend
 
 [vscode-wgsl](https://github.com/PolyMeilex/vscode-wgsl)
+
 ![gif](https://i.imgur.com/l8d4XPT.gif)
