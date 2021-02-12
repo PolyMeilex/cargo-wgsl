@@ -1,72 +1,64 @@
-use std::io::prelude::*;
+use std::path::PathBuf;
 
 use crate::validator::Validator;
 
-mod request;
-use request::{Request, RequestEvent};
-mod response;
-use response::{Response, ResponseEvent};
+use jsonrpc_stdio_server::jsonrpc_core::*;
+use jsonrpc_stdio_server::ServerBuilder;
 
-impl Response {
-    fn new(event: ResponseEvent) -> Self {
-        Self { event }
-    }
-    fn to_json(&self) -> String {
-        serde_json::to_string(&self).unwrap()
-    }
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Serialize, Deserialize)]
+struct ValidateFileParams {
+    path: PathBuf,
 }
 
-fn handle_input(input: &str) -> Result<Request, Response> {
-    serde_json::from_str(&input).map_err(|err| {
-        Response::new(ResponseEvent::UnknownError(format!(
-            "Input parsing error: {:#?}",
-            err
-        )))
-    })
+#[derive(Debug, Serialize, Deserialize)]
+enum ValidateFileResponse {
+    Ok,
+    ParserErr {
+        error: String,
+        scopes: Vec<String>,
+        line: usize,
+        pos: usize,
+    },
+    UnknownError(String),
 }
 
 pub fn run() {
-    let stdin = std::io::stdin();
-    let mut validator = Validator::new();
+    let mut rt = tokio::runtime::Runtime::new().unwrap();
 
-    let mut input = String::new();
-    loop {
-        if stdin.lock().read_line(&mut input).unwrap_or(0) > 0 {
-            let res = match handle_input(&input) {
-                Ok(request) => match request.event {
-                    RequestEvent::ValidatePath(path) => match validator.validate_wgsl(&path) {
-                        Ok(_) => Response::new(ResponseEvent::Ok),
-                        Err(err) => {
-                            use crate::wgsl_error::WgslError;
-                            match err {
-                                WgslError::ParserErr {
-                                    error,
-                                    scopes,
-                                    line,
-                                    pos,
-                                } => Response::new(ResponseEvent::ParserErr {
-                                    error,
-                                    scopes: scopes
-                                        .into_iter()
-                                        .map(|s| format!("{:?}", s))
-                                        .collect(),
-                                    line,
-                                    pos,
-                                }),
-                                err => {
-                                    Response::new(ResponseEvent::UnknownError(format!("{:?}", err)))
-                                }
-                            }
-                        }
-                    },
-                    _ => Response::new(ResponseEvent::UnknownError("Request Parse Failed".into())),
-                },
-                Err(response) => response,
+    rt.block_on(async {
+        let mut io = IoHandler::default();
+        io.add_sync_method("validate_file", move |params: Params| {
+            let params: ValidateFileParams = params.parse()?;
+
+            let mut validator = Validator::new();
+
+            let res = match validator.validate_wgsl(&params.path) {
+                Ok(_) => ValidateFileResponse::Ok,
+                Err(err) => {
+                    use crate::wgsl_error::WgslError;
+                    match err {
+                        WgslError::ParserErr {
+                            error,
+                            scopes,
+                            line,
+                            pos,
+                        } => ValidateFileResponse::ParserErr {
+                            error,
+                            scopes: scopes.into_iter().map(|s| format!("{:?}", s)).collect(),
+                            line,
+                            pos,
+                        },
+                        err => ValidateFileResponse::UnknownError(format!("{:?}", err)),
+                    }
+                }
             };
 
-            println!("{}", res.to_json());
+            Ok(to_value(res).unwrap())
+        });
 
-            input.clear();
-        }
-    }
+        let server = ServerBuilder::new(io).build();
+        server.await;
+    })
 }

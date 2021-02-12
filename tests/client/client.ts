@@ -6,13 +6,14 @@ p.stdin.setDefaultEncoding('utf8');
 p.stdout.setEncoding('utf8');
 p.stderr.setEncoding('utf8');
 
-process.stdin.setDefaultEncoding('utf8');
-process.stdout.setEncoding('utf8');
+// process.stdin.setDefaultEncoding('utf8');
+// process.stdout.setEncoding('utf8');
 
 // process.stdin.pipe(p.stdin)
 // p.stdout.pipe(process.stdout)
 
-const req = { event: { ValidatePath: "../test.wgsl" } };
+// const req = { event: { ValidatePath: "../test.wgsl" } };
+const req = { jsonrpc: "2.0", method: "say_hello", params: [42, 23], id: 1 };
 
 
 p.stdin.write(JSON.stringify(req) + '\n');
