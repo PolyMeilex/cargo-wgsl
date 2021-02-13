@@ -33,6 +33,9 @@ pub fn run() {
 
     rt.block_on(async {
         let mut io = IoHandler::default();
+
+        io.add_sync_method("version", move |_| Ok(Value::from("0.0.1")));
+
         io.add_sync_method("validate_file", move |params: Params| {
             let params: ValidateFileParams = params.parse()?;
 
