@@ -21,6 +21,10 @@ enum ValidateFileResponse {
         line: usize,
         pos: usize,
     },
+    ValidationErr {
+        message: String,
+        debug: String,
+    },
     UnknownError(String),
 }
 
@@ -50,7 +54,11 @@ pub fn run() {
                             line,
                             pos,
                         },
-                        err => ValidateFileResponse::UnknownError(format!("{:?}", err)),
+                        WgslError::ValidationErr(err) => ValidateFileResponse::ValidationErr {
+                            message: format!("{}", err),
+                            debug: format!("{:#?}", err),
+                        },
+                        err => ValidateFileResponse::UnknownError(format!("{:#?}", err)),
                     }
                 }
             };
