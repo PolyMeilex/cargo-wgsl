@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use crate::validator::Validator;
+use crate::naga::Naga;
 
 use jsonrpc_stdio_server::jsonrpc_core::*;
 use jsonrpc_stdio_server::ServerBuilder;
@@ -14,7 +14,7 @@ struct ValidateFileParams {
 
 #[derive(Debug, Serialize, Deserialize)]
 enum ValidateFileResponse {
-    Ok,
+    Ok(bool),
     ParserErr {
         error: String,
         scopes: Vec<String>,
@@ -36,13 +36,23 @@ pub fn run() {
 
         io.add_sync_method("version", move |_| Ok(Value::from("0.0.1")));
 
+        io.add_sync_method("get_file_tree", move |params: Params| {
+            let params: ValidateFileParams = params.parse()?;
+
+            let mut naga = Naga::new();
+
+            let tree = naga.get_wgsl_tree(&params.path).ok();
+
+            Ok(to_value(tree).unwrap())
+        });
+
         io.add_sync_method("validate_file", move |params: Params| {
             let params: ValidateFileParams = params.parse()?;
 
-            let mut validator = Validator::new();
+            let mut validator = Naga::new();
 
             let res = match validator.validate_wgsl(&params.path) {
-                Ok(_) => ValidateFileResponse::Ok,
+                Ok(_) => ValidateFileResponse::Ok(true),
                 Err(err) => {
                     use crate::wgsl_error::WgslError;
                     match err {

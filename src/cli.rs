@@ -1,13 +1,13 @@
 mod output_message;
 use output_message::OutputMessage;
 
-use crate::validator::Validator;
+use crate::naga::Naga;
 use walkdir::WalkDir;
 
 pub fn run() {
     let root_dir = std::fs::canonicalize("./").unwrap();
 
-    let mut validator = Validator::new();
+    let mut validator = Naga::new();
 
     let dir_walk = WalkDir::new(&root_dir);
     let dir_walk = dir_walk.into_iter().filter_entry(|e| {

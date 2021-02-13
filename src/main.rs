@@ -1,6 +1,6 @@
 mod cli;
+mod naga;
 mod server;
-mod validator;
 mod wgsl_error;
 
 fn main() {
