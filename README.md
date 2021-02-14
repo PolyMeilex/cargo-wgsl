@@ -15,8 +15,16 @@ cargo install cargo-wgsl
 - Nice looking and friendly cli output
 - JSON output for my future IDE related project
 
-## Real time validation using cargo-wgsl as a backend
+---
+
+## Using cargo-wgsl as a IDE backend:
 
 [vscode-wgsl](https://github.com/PolyMeilex/vscode-wgsl)
 
+### Real time validation in vscode:
+
 ![gif](https://i.imgur.com/l8d4XPT.gif)
+
+### Autocompletion (only for globals for now)
+
+![img](https://i.imgur.com/wYB29iP.png)
