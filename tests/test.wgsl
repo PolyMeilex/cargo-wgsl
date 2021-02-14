@@ -4,7 +4,7 @@ var<in> in_vertex_index: u32;
 var<out> out_pos: vec4<f32>;
 
 [[stage(vertex)]]
-fn vs_main() {
+fn vs_main() 
     var x: f32 = f32(i32(in_vertex_index) - 1);
     var y: f32 = f32(i32(in_vertex_index & 1) * 2 - 1);
     out_pos = vec4<f32>(x, y, 0.0, 1.0);
