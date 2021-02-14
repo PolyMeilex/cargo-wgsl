@@ -13,7 +13,7 @@ cargo install cargo-wgsl
 ### Goals
 
 - Nice looking and friendly cli output
-- JSON output for my future IDE related project
+- JSON output for IDE related project
 
 ---
 
