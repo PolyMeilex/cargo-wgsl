@@ -11,10 +11,10 @@ repository = "https://github.com/PolyMeilex/cargo-wgsl"
 
 [dependencies]
 colored = "2.0.0"
-naga = {version="0.3.1",features = ["wgsl-in"]}
+naga = {version="0.3.2",features = ["wgsl-in"]}
 walkdir = "2.3.1"
 
-serde = {version= "1.0.123", features=["derive"]}
+serde = {version= "1.0.124", features=["derive"]}
 jsonrpc-stdio-server = "17.0.0"
 
 tokio = { version = "0.2", features = ["rt-core"] }
