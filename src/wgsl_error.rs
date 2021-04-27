@@ -1,6 +1,6 @@
 use naga::{
     front::wgsl::{ParseError, Scope},
-    proc::ValidationError,
+    valid::ValidationError,
 };
 
 #[derive(Debug)]
@@ -23,17 +23,11 @@ impl From<std::io::Error> for WgslError {
 
 impl<'a> From<ParseError<'a>> for WgslError {
     fn from(err: ParseError<'a>) -> Self {
-        let ParseError {
-            error,
-            scopes,
-            line,
-            pos,
-        } = err;
-        let error = error.to_owned();
-
+        let (line, pos) = err.location();
+        let error = err.emit_to_string();
         Self::ParserErr {
-            error: error.to_string(),
-            scopes,
+            error,
+            scopes: vec![],
             line,
             pos,
         }

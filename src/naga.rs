@@ -1,4 +1,4 @@
-use naga::front::wgsl;
+use naga::{front::wgsl, valid::ValidationFlags};
 use std::path::Path;
 
 use serde::{Deserialize, Serialize};
@@ -6,13 +6,13 @@ use serde::{Deserialize, Serialize};
 use crate::wgsl_error::WgslError;
 
 pub struct Naga {
-    validator: naga::proc::Validator,
+    validator: naga::valid::Validator,
 }
 
 impl Naga {
     pub fn new() -> Self {
         Self {
-            validator: naga::proc::Validator::new(),
+            validator: naga::valid::Validator::new(ValidationFlags::all()),
         }
     }
 
