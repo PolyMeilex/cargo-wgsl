@@ -15,8 +15,4 @@ walkdir = "2.3"
 serde = { version = "1.0", features = ["derive"] }
 jsonrpc-stdio-server = "17.0"
 tokio = { version = "0.2", features = ["rt-core"] }
-
-[dependencies.naga]
-git = "https://github.com/gfx-rs/naga"
-tag = "gfx-23"
-features = ["wgsl-in"]
+naga = { version = "0.4", features = ["wgsl-in"] }
