@@ -23,14 +23,12 @@ impl OutputMessage {
                 error,
                 line,
                 pos,
-                scopes,
             } => {
                 let arrow = "-->".blue();
                 let location = format!("{}:{}:{}", path.display(), line, pos);
                 let error = format!("{}: {}", "error".red().bold(), error);
-                let scopes = format!("{}: {:#?}", "scopes".blue().bold(), scopes);
 
-                format!("{} {}\n{}\n{}", arrow, location, error, scopes)
+                format!("{} {}\n{}", arrow, location, error)
             }
             err => {
                 format!("❌ {} \n{:#?}", path.display(), err)

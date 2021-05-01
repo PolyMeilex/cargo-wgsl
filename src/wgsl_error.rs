@@ -1,5 +1,5 @@
 use naga::{
-    front::wgsl::{ParseError, Scope},
+    front::wgsl::ParseError,
     valid::ValidationError,
 };
 
@@ -8,7 +8,6 @@ pub enum WgslError {
     ValidationErr(ValidationError),
     ParserErr {
         error: String,
-        scopes: Vec<Scope>,
         line: usize,
         pos: usize,
     },
@@ -27,7 +26,6 @@ impl<'a> From<ParseError<'a>> for WgslError {
         let error = err.emit_to_string();
         Self::ParserErr {
             error,
-            scopes: vec![],
             line,
             pos,
         }
