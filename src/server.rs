@@ -58,12 +58,11 @@ pub fn run() {
                     match err {
                         WgslError::ParserErr {
                             error,
-                            scopes,
                             line,
                             pos,
                         } => ValidateFileResponse::ParserErr {
                             error,
-                            scopes: scopes.into_iter().map(|s| format!("{:?}", s)).collect(),
+                            scopes: vec![],
                             line,
                             pos,
                         },

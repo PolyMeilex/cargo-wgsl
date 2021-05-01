@@ -5,16 +5,14 @@ authors = ["Poly <marynczak.bartlomiej@gmail.com>"]
 edition = "2018"
 
 description = "Validate wgsl in rust projects"
-keywords = ["CLI","wgsl","cargo"]
+keywords = ["CLI", "wgsl", "cargo"]
 license = "MIT"
 repository = "https://github.com/PolyMeilex/cargo-wgsl"
 
 [dependencies]
-colored = "2.0.0"
-naga = {version="0.3.2",features = ["wgsl-in"]}
-walkdir = "2.3.1"
-
-serde = {version= "1.0.124", features=["derive"]}
-jsonrpc-stdio-server = "17.0.0"
-
+colored = "2.0"
+walkdir = "2.3"
+serde = { version = "1.0", features = ["derive"] }
+jsonrpc-stdio-server = "17.0"
 tokio = { version = "0.2", features = ["rt-core"] }
+naga = { version = "0.4", features = ["wgsl-in"] }
