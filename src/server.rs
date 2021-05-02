@@ -34,7 +34,10 @@ pub fn run() {
     rt.block_on(async {
         let mut io = IoHandler::default();
 
+        // Protocol Version
         io.add_sync_method("version", move |_| Ok(Value::from("0.0.1")));
+        // Binary Version
+        io.add_sync_method("binary_version", move |_| Ok(Value::from("0.0.4")));
 
         io.add_sync_method("get_file_tree", move |params: Params| {
             let params: ValidateFileParams = params.parse()?;
