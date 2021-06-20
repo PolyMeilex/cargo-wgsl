@@ -52,7 +52,7 @@ checksum = "0e4cec68f03f32e44924783795810fa50a7035d8c8ebe78580ad7e6c703fba38"
 
 [[package]]
 name = "cargo-wgsl"
-version = "0.0.4"
+version = "0.0.5"
 dependencies = [
  "colored",
  "jsonrpc-stdio-server",
@@ -332,9 +332,9 @@ dependencies = [
 
 [[package]]
 name = "naga"
-version = "0.4.0"
+version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a462414ac6a74a8fcc2c6d235d9a92b288f22682c016cf725e75d0c9470fb515"
+checksum = "ef670817eef03d356d5a509ea275e7dd3a78ea9e24261ea3cb2dfed1abb08f64"
 dependencies = [
  "bit-set",
  "bitflags",

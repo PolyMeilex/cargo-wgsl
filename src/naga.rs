@@ -1,4 +1,7 @@
-use naga::{front::wgsl, valid::ValidationFlags};
+use naga::{
+    front::wgsl,
+    valid::{Capabilities, ValidationFlags},
+};
 use std::path::Path;
 
 use serde::{Deserialize, Serialize};
@@ -12,13 +15,14 @@ pub struct Naga {
 impl Naga {
     pub fn new() -> Self {
         Self {
-            validator: naga::valid::Validator::new(ValidationFlags::all()),
+            validator: naga::valid::Validator::new(ValidationFlags::all(), Capabilities::all()),
         }
     }
 
     pub fn validate_wgsl(&mut self, path: &Path) -> Result<(), WgslError> {
         let shader = std::fs::read_to_string(&path).map_err(WgslError::from)?;
-        let module = wgsl::parse_str(&shader).map_err(WgslError::from)?;
+        let module =
+            wgsl::parse_str(&shader).map_err(|err| WgslError::from_parse_err(err, &shader))?;
 
         if let Err(err) = self.validator.validate(&module) {
             Err(WgslError::ValidationErr(err))
@@ -29,7 +33,8 @@ impl Naga {
 
     pub fn get_wgsl_tree(&mut self, path: &Path) -> Result<WgslTree, WgslError> {
         let shader = std::fs::read_to_string(&path).map_err(WgslError::from)?;
-        let module = wgsl::parse_str(&shader).map_err(WgslError::from)?;
+        let module =
+            wgsl::parse_str(&shader).map_err(|err| WgslError::from_parse_err(err, &shader))?;
 
         let mut types = Vec::new();
         let mut global_variables = Vec::new();

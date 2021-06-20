@@ -1,6 +1,6 @@
 [package]
 name = "cargo-wgsl"
-version = "0.0.4"
+version = "0.0.5"
 authors = ["Poly <marynczak.bartlomiej@gmail.com>"]
 edition = "2018"
 
@@ -15,4 +15,4 @@ walkdir = "2.3"
 serde = { version = "1.0", features = ["derive"] }
 jsonrpc-stdio-server = "17.0"
 tokio = { version = "0.2", features = ["rt-core"] }
-naga = { version = "0.4", features = ["wgsl-in"] }
+naga = { version = "0.5", features = ["wgsl-in"] }
