@@ -1,5 +1,7 @@
 # Cargo-wgsl
 
+[![Crate](https://img.shields.io/crates/v/cargo-wgsl.svg)](https://crates.io/crates/cargo-wgsl)
+
 Validate wgsl in rust projects
 
 ![img](https://i.imgur.com/mWmNZYS.png)
