@@ -1,6 +1,7 @@
 # Cargo-wgsl
 
 [![Crate](https://img.shields.io/crates/v/cargo-wgsl.svg)](https://crates.io/crates/cargo-wgsl)
+[![dependency status](https://deps.rs/repo/github/PolyMeilex/cargo-wgsl/status.svg)](https://deps.rs/crate/cargo-wgsl)
 
 Validate wgsl in rust projects
 
