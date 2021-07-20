@@ -6,13 +6,16 @@ mod wgsl_error;
 fn main() {
     let last = std::env::args().last();
 
-    if let Some(last) = last {
+    let exit_code = if let Some(last) = last {
         if last == "--server" {
             server::run();
+            0
         } else {
-            cli::run();
+            cli::run()
         }
     } else {
-        cli::run();
-    }
+        cli::run()
+    };
+
+    std::process::exit(exit_code);
 }

@@ -4,7 +4,7 @@ use output_message::OutputMessage;
 use crate::naga::Naga;
 use walkdir::WalkDir;
 
-pub fn run() {
+pub fn run() -> i32 {
     let root_dir = std::fs::canonicalize("./").unwrap();
 
     let mut validator = Naga::new();
@@ -60,9 +60,14 @@ pub fn run() {
         }
     });
 
-    let messages: Vec<String> = messages.into_iter().map(|msg| msg.text).collect();
+    let mut exit_code = 0;
 
     for msg in messages {
-        println!("{}", msg);
+        println!("{}", msg.text);
+        if msg.is_err {
+            exit_code = 1;
+        }
     }
+
+    exit_code
 }
