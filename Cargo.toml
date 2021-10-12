@@ -13,6 +13,6 @@ repository = "https://github.com/PolyMeilex/cargo-wgsl"
 colored = "2.0"
 walkdir = "2.3"
 serde = { version = "1.0", features = ["derive"] }
-jsonrpc-stdio-server = "17.0"
-tokio = { version = "0.2", features = ["rt-core"] }
-naga = { version = "0.7.0", features = ["wgsl-in"] }
+jsonrpc-stdio-server = "18.0.0"
+tokio = { version = "1", features = ["rt-multi-thread", "io-util", "time", "net"]}
+naga = { version = "0.7.0", features = ["wgsl-in", "validate"] }

@@ -29,7 +29,7 @@ enum ValidateFileResponse {
 }
 
 pub fn run() {
-    let mut rt = tokio::runtime::Runtime::new().unwrap();
+    let rt = tokio::runtime::Runtime::new().unwrap();
 
     rt.block_on(async {
         let mut io = IoHandler::default();

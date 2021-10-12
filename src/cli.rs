@@ -27,7 +27,7 @@ pub fn run() -> i32 {
             Ok(entry) => {
                 let path = entry.path();
                 if !path.is_dir() {
-                    let msg = match validator.validate_wgsl(&path) {
+                    let msg = match validator.validate_wgsl(path) {
                         Ok(_) => {
                             let path = path.strip_prefix(&root_dir).unwrap_or(path);
                             OutputMessage::success(path)
