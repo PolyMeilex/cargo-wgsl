@@ -1,6 +1,7 @@
 use colored::*;
+use naga::front::wgsl::ParseError;
 
-use crate::wgsl_error::WgslError;
+use crate::naga::WgslSource;
 use std::path::Path;
 
 pub struct OutputMessage {
@@ -17,23 +18,26 @@ impl OutputMessage {
         }
     }
 
-    pub fn error(path: &Path, error: WgslError) -> Self {
-        let err_text = match error {
-            WgslError::ParserErr {
-                error,
-                line,
-                pos,
-            } => {
-                let arrow = "-->".blue();
-                let location = format!("{}:{}:{}", path.display(), line, pos);
-                let error = format!("{}: {}", "error".red().bold(), error);
+    pub fn parser_error(source: &WgslSource, error: ParseError) -> Self {
+        let (line, pos) = error.location(&source.code);
+        let error = error.emit_to_string(&source.code);
 
-                format!("{} {}\n{}", arrow, location, error)
-            }
-            err => {
-                format!("❌ {} \n{:#?}", path.display(), err)
-            }
+        let err_text = {
+            let arrow = "-->".blue();
+            let location = format!("{}:{}:{}", source.path.display(), line, pos);
+            let error = format!("{}: {}", "error".red().bold(), error);
+
+            format!("{} {}\n{}", arrow, location, error)
         };
+
+        Self {
+            is_err: true,
+            text: err_text,
+        }
+    }
+
+    pub fn unknown_error<D: std::fmt::Debug>(path: &Path, error: D) -> Self {
+        let err_text = format!("❌ {} \n{:#?}", path.display(), error);
 
         Self {
             is_err: true,

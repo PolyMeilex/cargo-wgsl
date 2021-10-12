@@ -1,13 +1,14 @@
 mod output_message;
+use naga::front::wgsl;
 use output_message::OutputMessage;
 
-use crate::naga::Naga;
+use crate::naga::{NagaValidator, WgslSource};
 use walkdir::WalkDir;
 
 pub fn run() -> i32 {
     let root_dir = std::fs::canonicalize("./").unwrap();
 
-    let mut validator = Naga::new();
+    let mut validator = NagaValidator::new();
 
     let dir_walk = WalkDir::new(&root_dir);
     let dir_walk = dir_walk.into_iter().filter_entry(|e| {
@@ -27,15 +28,18 @@ pub fn run() -> i32 {
             Ok(entry) => {
                 let path = entry.path();
                 if !path.is_dir() {
-                    let msg = match validator.validate_wgsl(&path) {
-                        Ok(_) => {
-                            let path = path.strip_prefix(&root_dir).unwrap_or(path);
-                            OutputMessage::success(path)
-                        }
-                        Err(err) => {
-                            let path = path.strip_prefix(&root_dir).unwrap_or(path);
-                            OutputMessage::error(path, err)
-                        }
+                    let msg = match WgslSource::from(&path) {
+                        Ok(source) => match wgsl::parse_str(&source.code) {
+                            Ok(module) => {
+                                if let Err(error) = validator.validator.validate(&module) {
+                                    OutputMessage::unknown_error(path, error)
+                                } else {
+                                    OutputMessage::success(path)
+                                }
+                            }
+                            Err(error) => OutputMessage::parser_error(&source, error),
+                        },
+                        Err(error) => OutputMessage::unknown_error(path, error),
                     };
 
                     messages.push(msg);
