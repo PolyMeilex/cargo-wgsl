@@ -15,4 +15,4 @@ walkdir = "2.3"
 serde = { version = "1.0", features = ["derive"] }
 jsonrpc-stdio-server = "18.0.0"
 tokio = { version = "1", features = ["rt-multi-thread", "io-util", "time", "net"]}
-naga = { version = "0.7.0", features = ["wgsl-in", "validate"] }
+naga = { version = "0.8.0", features = ["wgsl-in", "validate"] }
