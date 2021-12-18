@@ -1,8 +1,8 @@
-use naga::{front::wgsl::ParseError, valid::ValidationError};
+use naga::{front::wgsl::ParseError, valid::ValidationError, WithSpan};
 
 #[derive(Debug)]
 pub enum WgslError {
-    ValidationErr(ValidationError),
+    ValidationErr(WithSpan<ValidationError>),
     ParserErr {
         error: String,
         line: usize,
