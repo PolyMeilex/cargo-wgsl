@@ -19,8 +19,20 @@ impl From<std::io::Error> for WgslError {
 
 impl WgslError {
     pub fn from_parse_err(err: ParseError, src: &str) -> Self {
-        let (line, pos) = err.location(src);
         let error = err.emit_to_string(src);
-        Self::ParserErr { error, line, pos }
+        let loc = err.location(src);
+        if let Some(loc) = loc {
+            Self::ParserErr {
+                error,
+                line: loc.line_number as usize,
+                pos: loc.line_position as usize,
+            }
+        } else {
+            Self::ParserErr {
+                error,
+                line: 0,
+                pos: 0,
+            }
+        }
     }
 }
