@@ -24,8 +24,8 @@ impl Naga {
         let module =
             wgsl::parse_str(&shader).map_err(|err| WgslError::from_parse_err(err, &shader))?;
 
-        if let Err(err) = self.validator.validate(&module) {
-            Err(WgslError::ValidationErr(err))
+        if let Err(error) = self.validator.validate(&module) {
+            Err(WgslError::ValidationErr { src: shader, error })
         } else {
             Ok(())
         }

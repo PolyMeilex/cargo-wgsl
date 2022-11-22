@@ -59,20 +59,30 @@ pub fn run() {
                 Err(err) => {
                     use crate::wgsl_error::WgslError;
                     match err {
-                        WgslError::ParserErr {
-                            error,
-                            line,
-                            pos,
-                        } => ValidateFileResponse::ParserErr {
-                            error,
-                            scopes: vec![],
-                            line,
-                            pos,
-                        },
-                        WgslError::ValidationErr(err) => ValidateFileResponse::ValidationErr {
-                            message: format!("{}", err),
-                            debug: format!("{:#?}", err),
-                        },
+                        WgslError::ParserErr { error, line, pos } => {
+                            ValidateFileResponse::ParserErr {
+                                error,
+                                scopes: vec![],
+                                line,
+                                pos,
+                            }
+                        }
+                        WgslError::ValidationErr { src, error } => {
+                            if let Some((span, _)) = error.spans().next() {
+                                let loc = span.location(&src);
+                                ValidateFileResponse::ParserErr {
+                                    error: format!("{}.\n\n{:#?}", error, error),
+                                    scopes: vec![],
+                                    line: loc.line_number as usize,
+                                    pos: loc.line_position as usize,
+                                }
+                            } else {
+                                ValidateFileResponse::ValidationErr {
+                                    message: format!("{}.\n\n{:#?}", error, error),
+                                    debug: format!("{:#?}", error),
+                                }
+                            }
+                        }
                         err => ValidateFileResponse::UnknownError(format!("{:#?}", err)),
                     }
                 }

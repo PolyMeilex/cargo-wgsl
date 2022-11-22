@@ -19,11 +19,7 @@ impl OutputMessage {
 
     pub fn error(path: &Path, error: WgslError) -> Self {
         let err_text = match error {
-            WgslError::ParserErr {
-                error,
-                line,
-                pos,
-            } => {
+            WgslError::ParserErr { error, line, pos } => {
                 let arrow = "-->".blue();
                 let location = format!("{}:{}:{}", path.display(), line, pos);
                 let error = format!("{}: {}", "error".red().bold(), error);
