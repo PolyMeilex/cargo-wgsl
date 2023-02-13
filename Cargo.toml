@@ -20,4 +20,4 @@ tokio = { version = "1", features = [
     "time",
     "net",
 ] }
-naga = { version = "0.14.2", features = ["wgsl-in", "validate", "span"] }
+naga = { git = "https://github.com/gfx-rs/naga", rev = "f0edae8" }
