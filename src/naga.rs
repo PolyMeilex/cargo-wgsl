@@ -1,6 +1,5 @@
 use naga::{
-    front::wgsl,
-    valid::{Capabilities, ValidationFlags},
+    valid::{Capabilities, ValidationFlags}, front::wgsl,
 };
 use std::path::Path;
 
