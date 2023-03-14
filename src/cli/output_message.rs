@@ -26,6 +26,9 @@ impl OutputMessage {
 
                 format!("{} {}\n{}", arrow, location, error)
             }
+            WgslError::ValidationErr { error, emitted, .. } => {
+                format!("❌ {} \n{:?} {}", path.display(), error, emitted)
+            }
             err => {
                 format!("❌ {} \n{:#?}", path.display(), err)
             }

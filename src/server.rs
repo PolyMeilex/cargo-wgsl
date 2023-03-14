@@ -67,7 +67,7 @@ pub fn run() {
                                 pos,
                             }
                         }
-                        WgslError::ValidationErr { src, error } => {
+                        WgslError::ValidationErr { src, error, .. } => {
                             if let Some((span, _)) = error.spans().next() {
                                 let loc = span.location(&src);
                                 ValidateFileResponse::ParserErr {
