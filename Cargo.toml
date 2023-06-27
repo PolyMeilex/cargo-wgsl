@@ -1,6 +1,6 @@
 [package]
 name = "cargo-wgsl"
-version = "0.0.13"
+version = "0.0.14"
 authors = ["Poly <marynczak.bartlomiej@gmail.com>"]
 edition = "2018"
 
