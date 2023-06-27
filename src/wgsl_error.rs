@@ -5,6 +5,7 @@ pub enum WgslError {
     ValidationErr {
         src: String,
         error: WithSpan<ValidationError>,
+        emitted: String,
     },
     ParserErr {
         error: String,
