@@ -26,10 +26,15 @@ impl Naga {
     }
 
     pub fn validate_wgsl(&mut self, shader: &str) -> Result<(), WgslError> {
-        let module = wgsl::parse_str(shader).map_err(|err| WgslError::from_parse_err(err, shader))?;
+        let module =
+            wgsl::parse_str(shader).map_err(|err| WgslError::from_parse_err(err, shader))?;
 
         if let Err(error) = self.validator.validate(&module) {
-            Err(WgslError::ValidationErr { emitted: error.emit_to_string(shader), src: shader.to_string(), error })
+            Err(WgslError::ValidationErr {
+                emitted: error.emit_to_string(shader),
+                src: shader.to_string(),
+                error,
+            })
         } else {
             Ok(())
         }

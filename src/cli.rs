@@ -4,9 +4,9 @@ use output_message::OutputMessage;
 use crate::naga::Naga;
 use walkdir::WalkDir;
 
-use std::string::String;
 use std::io::Read;
 use std::path::Path;
+use std::string::String;
 
 pub fn run() -> i32 {
     let root_dir = std::fs::canonicalize("./").unwrap();
@@ -21,12 +21,8 @@ pub fn run() -> i32 {
         let size = std::io::stdin().read_to_string(&mut buffer).unwrap_or(0);
         if size > 0 {
             let msg = match validator.validate_wgsl(buffer.as_str()) {
-                Ok(_) => {
-                    OutputMessage::success(Path::new("@stdin"))
-                }
-                Err(err) => {
-                    OutputMessage::error(Path::new("@stdin"), err)
-                }
+                Ok(_) => OutputMessage::success(Path::new("@stdin")),
+                Err(err) => OutputMessage::error(Path::new("@stdin"), err),
             };
             messages.push(msg);
         }
