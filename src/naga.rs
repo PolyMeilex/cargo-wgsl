@@ -19,15 +19,20 @@ impl Naga {
         }
     }
 
-    pub fn validate_wgsl(&mut self, path: &Path) -> Result<(), WgslError> {
+    pub fn validate_wgsl_file(&mut self, path: &Path) -> Result<(), WgslError> {
         let shader = std::fs::read_to_string(path).map_err(WgslError::from)?;
+        self.validate_wgsl(&shader)?;
+        Ok(())
+    }
+
+    pub fn validate_wgsl(&mut self, shader: &str) -> Result<(), WgslError> {
         let module =
-            wgsl::parse_str(&shader).map_err(|err| WgslError::from_parse_err(err, &shader))?;
+            wgsl::parse_str(shader).map_err(|err| WgslError::from_parse_err(err, shader))?;
 
         if let Err(error) = self.validator.validate(&module) {
             Err(WgslError::ValidationErr {
-                emitted: error.emit_to_string(&shader),
-                src: shader,
+                emitted: error.emit_to_string(shader),
+                src: shader.to_string(),
                 error,
             })
         } else {

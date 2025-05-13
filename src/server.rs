@@ -54,7 +54,7 @@ pub fn run() {
 
             let mut validator = Naga::new();
 
-            let res = match validator.validate_wgsl(&params.path) {
+            let res = match validator.validate_wgsl_file(&params.path) {
                 Ok(_) => ValidateFileResponse::Ok(true),
                 Err(err) => {
                     use crate::wgsl_error::WgslError;

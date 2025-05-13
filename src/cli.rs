@@ -4,48 +4,65 @@ use output_message::OutputMessage;
 use crate::naga::Naga;
 use walkdir::WalkDir;
 
+use std::io::Read;
+use std::path::Path;
+use std::string::String;
+
 pub fn run() -> i32 {
     let root_dir = std::fs::canonicalize("./").unwrap();
 
     let mut validator = Naga::new();
 
-    let dir_walk = WalkDir::new(&root_dir);
-    let dir_walk = dir_walk.into_iter().filter_entry(|e| {
-        let path = e.path();
-
-        if !path.is_dir() {
-            path.extension().map(|ext| ext == "wgsl").unwrap_or(false)
-        } else {
-            true
-        }
-    });
-
     let mut messages = Vec::new();
 
-    for entry in dir_walk {
-        match entry {
-            Ok(entry) => {
-                let path = entry.path();
-                if !path.is_dir() {
-                    let msg = match validator.validate_wgsl(path) {
-                        Ok(_) => {
-                            let path = path.strip_prefix(&root_dir).unwrap_or(path);
-                            OutputMessage::success(path)
-                        }
-                        Err(err) => {
-                            let path = path.strip_prefix(&root_dir).unwrap_or(path);
-                            OutputMessage::error(path, err)
-                        }
-                    };
+    let args: Vec<String> = std::env::args().collect();
+    if args.contains(&"--stdin".to_string()) {
+        let mut buffer = String::new();
+        let size = std::io::stdin().read_to_string(&mut buffer).unwrap_or(0);
+        if size > 0 {
+            let msg = match validator.validate_wgsl(buffer.as_str()) {
+                Ok(_) => OutputMessage::success(Path::new("@stdin")),
+                Err(err) => OutputMessage::error(Path::new("@stdin"), err),
+            };
+            messages.push(msg);
+        }
+    } else {
+        let dir_walk = WalkDir::new(&root_dir);
+        let dir_walk = dir_walk.into_iter().filter_entry(|e| {
+            let path = e.path();
 
-                    messages.push(msg);
-                }
+            if !path.is_dir() {
+                path.extension().map(|ext| ext == "wgsl").unwrap_or(false)
+            } else {
+                true
             }
-            Err(err) => {
-                messages.push(OutputMessage {
-                    is_err: true,
-                    text: format!("{:?}", err),
-                });
+        });
+
+        for entry in dir_walk {
+            match entry {
+                Ok(entry) => {
+                    let path = entry.path();
+                    if !path.is_dir() {
+                        let msg = match validator.validate_wgsl_file(path) {
+                            Ok(_) => {
+                                let path = path.strip_prefix(&root_dir).unwrap_or(path);
+                                OutputMessage::success(path)
+                            }
+                            Err(err) => {
+                                let path = path.strip_prefix(&root_dir).unwrap_or(path);
+                                OutputMessage::error(path, err)
+                            }
+                        };
+
+                        messages.push(msg);
+                    }
+                }
+                Err(err) => {
+                    messages.push(OutputMessage {
+                        is_err: true,
+                        text: format!("{:?}", err),
+                    });
+                }
             }
         }
     }
