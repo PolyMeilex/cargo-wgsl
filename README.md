@@ -5,7 +5,8 @@
 
 Validate wgsl in rust projects
 
-![img](https://i.imgur.com/mWmNZYS.png)
+![image](https://github.com/user-attachments/assets/dac7ca80-36c1-42ac-a1e9-95ccae331afb)
+
 
 ### Install
 
