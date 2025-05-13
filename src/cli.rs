@@ -14,7 +14,7 @@ pub fn run() -> i32 {
         let path = e.path();
 
         if !path.is_dir() {
-            path.extension().map(|ext| &*ext == "wgsl").unwrap_or(false)
+            path.extension().map(|ext| ext == "wgsl").unwrap_or(false)
         } else {
             true
         }
