@@ -20,7 +20,7 @@ impl Naga {
     }
 
     pub fn validate_wgsl_file(&mut self, path: &Path) -> Result<(), WgslError> {
-        let shader = std::fs::read_to_string(&path).map_err(WgslError::from)?;
+        let shader = std::fs::read_to_string(path).map_err(WgslError::from)?;
         self.validate_wgsl(&shader)?;
         Ok(())
     }
@@ -41,7 +41,7 @@ impl Naga {
     }
 
     pub fn get_wgsl_tree(&mut self, path: &Path) -> Result<WgslTree, WgslError> {
-        let shader = std::fs::read_to_string(&path).map_err(WgslError::from)?;
+        let shader = std::fs::read_to_string(path).map_err(WgslError::from)?;
         let module =
             wgsl::parse_str(&shader).map_err(|err| WgslError::from_parse_err(err, &shader))?;
 

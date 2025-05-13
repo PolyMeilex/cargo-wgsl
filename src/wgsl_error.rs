@@ -1,5 +1,6 @@
 use naga::{front::wgsl::ParseError, valid::ValidationError, WithSpan};
 
+#[allow(clippy::enum_variant_names)]
 #[derive(Debug)]
 pub enum WgslError {
     ValidationErr {
@@ -12,6 +13,7 @@ pub enum WgslError {
         line: usize,
         pos: usize,
     },
+    #[allow(unused)]
     IoErr(std::io::Error),
 }
 

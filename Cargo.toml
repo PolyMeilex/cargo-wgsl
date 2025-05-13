@@ -10,7 +10,7 @@ license = "MIT"
 repository = "https://github.com/PolyMeilex/cargo-wgsl"
 
 [dependencies]
-colored = "2.1"
+colored = "3.0"
 walkdir = "2.5"
 serde = { version = "1.0", features = ["derive"] }
 jsonrpc-stdio-server = "18.0.0"
@@ -20,4 +20,4 @@ tokio = { version = "1", features = [
     "time",
     "net",
 ] }
-naga = { version = "0.20.0", features = ["wgsl-in"] }
+naga = { version = "25.0.1", features = ["wgsl-in"] }
