@@ -20,4 +20,4 @@ tokio = { version = "1", features = [
     "time",
     "net",
 ] }
-naga = { version = "25.0.1", features = ["wgsl-in"] }
+naga = { version = "27.0.3", features = ["wgsl-in"] }
